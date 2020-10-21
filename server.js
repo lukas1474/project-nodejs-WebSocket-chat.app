@@ -4,7 +4,9 @@ const socket = require('socket.io');
 
 const app = express();
 
-const messages = [];
+let messages = [];
+
+let users = [];
 
 app.use(express.static(path.join(__dirname, '/client')));
 
@@ -19,6 +21,7 @@ const io = socket(server);
 
 io.on('connection', (socket) => {
   console.log('New client! Its id – ' + socket.id);
+  console.log(users);
 
   socket.on('message', (message) => {
     console.log('Oh, I\'ve got something from ' + socket.id)
@@ -26,6 +29,27 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('message', message);
   });
 
-  socket.on('disconnect', () => { console.log('Oh, socket ' + socket.id + ' has left') });
-  console.log('I\'ve added a listener on message and disconnect events \n');
+  socket.on('login', (data) => {
+    users.push(data);
+    socket.broadcast.emit('newUser', { user: 'ChatBot', content: `${data.user} has joined the conversation!` });
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Oh, socket ' + socket.id + ' has left')
+    const removedUser = users.filter(user => user.id === socket.id)[0];
+    if (removedUser !== user) {
+      users.splice(users.indexOf(removedUser), 1);
+      console.log('left', removedUser.user);
+      socket.broadcast.emit('removeUser', { user: 'ChatBot', content: `${removedUser.user} has left the conversation!` })
+    }
+    console.log('I\'ve added a listener on message and disconnect events \n');
+  });
 });
+
+// io.on('join', (socket) => {
+//   socket.on('join', (user) => {
+//     console.log('New user! ' + socket.id)
+//     users.push({name: user, id: socket.id});
+//     socket.broadcast.emit('join', user);
+//   });
+// })
