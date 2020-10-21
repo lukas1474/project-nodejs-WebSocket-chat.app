@@ -5,6 +5,10 @@ const addMessageForm = document.querySelector('#add-messages-form');
 const userNameInput = document.querySelector('#username');
 const messageContentInput = document.querySelector('#message-content');
 
+const socket = io();
+
+socket.on('message', ({ author, content }) => addMessage(author, content))
+
 let userName = '';
 
 loginForm.addEventListener('submit', function (event) {
@@ -32,12 +36,15 @@ function sendMessage(event) {
     event.preventDefault();
     // console.log('test');
 
-    if (messageContentInput.value == '') {
-        alert('uzupełnij pole wiadomości');
-        return;
-    }
+    let messageContent = messageContentInput.value;
 
-    addMessage(userName, messageContentInput.value);
+    if (!messageContent.length) {
+        alert('uzupełnij pole wiadomości');
+    } else {
+        addMessage(userName, messageContent);
+        socket.emit('message', {author: userName, content: messageContent})
+        messageContentInput.value = '';
+    }
 
     messageContentInput.value = '';
 };
@@ -55,4 +62,6 @@ function addMessage(author, content) {
     `;
     messagesList.appendChild(message);
 }
+
+
 
