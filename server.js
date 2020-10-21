@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('Oh, socket ' + socket.id + ' has left')
     const removedUser = users.filter(user => user.id === socket.id)[0];
-    if (removedUser !== user) {
+    if (removedUser !== undefined) {
       users.splice(users.indexOf(removedUser), 1);
       console.log('left', removedUser.user);
       socket.broadcast.emit('removeUser', { user: 'ChatBot', content: `${removedUser.user} has left the conversation!` })
@@ -45,11 +45,3 @@ io.on('connection', (socket) => {
     console.log('I\'ve added a listener on message and disconnect events \n');
   });
 });
-
-// io.on('join', (socket) => {
-//   socket.on('join', (user) => {
-//     console.log('New user! ' + socket.id)
-//     users.push({name: user, id: socket.id});
-//     socket.broadcast.emit('join', user);
-//   });
-// })

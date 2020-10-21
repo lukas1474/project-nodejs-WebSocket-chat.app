@@ -31,32 +31,12 @@ function login(event) {
         loginForm.classList.remove('show');
         messagesSection.classList.add('show');
 
-        // login(userNameInput.value);
     }
 
 };
 
-// join.addEventListener('submit', function (event){
-//     event.preventDefault();
-
-//     if (userNameInput == userNameInput.value);
-//     addMessage(userName, messageContent);
-//     socket.emit('join', {author: userName, content: messageContent})
-// });
-
-// function join (event) {
-//     event.preventDefault();
-
-//     if (login == userName);
-//     addMessage(userName, messageContent);
-//     socket.emit('message', {author: userName, content: messageContent})
-// };
-
-
-
 function sendMessage(event) {
     event.preventDefault();
-    // console.log('test');
 
     let messageContent = messageContentInput.value;
 
