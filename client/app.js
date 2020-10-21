@@ -23,16 +23,13 @@ function login(event) {
         alert('uzupełnij pole name');
 
     } else {
-
         userName = userNameInput.value;
         console.log(userName);
         socket.emit('login', { user: userName, id: socket.id });
 
         loginForm.classList.remove('show');
         messagesSection.classList.add('show');
-
     }
-
 };
 
 function sendMessage(event) {
@@ -47,7 +44,6 @@ function sendMessage(event) {
         socket.emit('message', { author: userName, content: messageContent })
         messageContentInput.value = '';
     }
-
     messageContentInput.value = '';
 };
 
